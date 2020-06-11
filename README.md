@@ -1,6 +1,6 @@
-# ww-deal Contract Bridge Tournament Dealer
+# ww-deal Contract Bridge Tournament Deal Generator
 
-ww-deal is a Contract Bridge Tournament Dealer. Like [Hans van Staveren's Big Deal](https://sater.home.xs4all.nl/), this dealer satisfy the following requirements that are necessary for a tournament dealer:
+ww-deal is a Contract Bridge Tournament Deal Generator. Like [Hans van Staveren's Big Deal](https://sater.home.xs4all.nl/), this deal generator satisfies the following requirements that are necessary for a tournament deal generator:
 
 1. The software should be able to generate every possible bridge deal, since that is also possible with manual dealing
 2. The software should generate every deal with the same probability, without being influenced by the board number, previous hands or any other circumstance
@@ -11,14 +11,17 @@ ww-deal is a Contract Bridge Tournament Dealer. Like [Hans van Staveren's Big De
 The ww-deal library provides one main function to use:
 
 ```c
-deal_uid_t ww_deal(deal_t *deal, const uint8_t key[32], uint64_t event_num, uint32_t session_num, uint32_t board_num);
+deal_uid_t ww_deal(const uint8_t key[32], uint64_t event_num, uint32_t session_num, uint32_t board_num);
 ```
 
 The function accepts a 256 bit seed/key, an event number, a session number, and a board number.
-The function then deals one board, and provides two outputs:
+The function then deals one board, and returns a 96 bit number representing the deal's unique id
 
-1. A 96 bit number representing the deal's unique id
-2. A deal_t struct that represents the cards being held by 4 players.
+Utility functions are provided to convert the deal uid:
+
+- ``ww_deal_map_pavlicek`` converts the deal uid to a ww_deal_t structure
+- ``ww_deal_to_pbn`` converts the deal uid to a PBN compatible string
+- ``ww_deal_to_uuid`` converts the deal uid to a hex string representing a Richard Pavlicek's deal uuid http://www.rpbridge.net/7z68.htm 
 
 # How ww-deal works
 
@@ -59,5 +62,5 @@ Big Deal uses its own "mp96" library for 96 bit integer operations, operating on
 
 # Comparison against Redeal and Thomas Andrews's Deal
 
-Redeal and Thomas Andrew's Deal do not satisfy the 3 requirements necessary for a tournament dealer, however they are very fast and suitable for statistical analysis, especially when used with Smartstacking which is not supported by ww-deal. Theoretically it would be possible to modify Redeal/Deal to use ww-deal as the backend deal generator, sacrificing speed for better theoretical qualify of generated deals.
+Redeal and Thomas Andrew's Deal do not satisfy the 3 requirements necessary for a tournament deal generator, however they are very fast and suitable for statistical analysis, especially when used with Smartstacking which is not supported by ww-deal. Theoretically it would be possible to modify Redeal/Deal to use ww-deal as the backend deal generator, sacrificing speed for better theoretical qualify of generated deals.
 

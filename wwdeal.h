@@ -24,17 +24,19 @@
  *
  */
 
+#include <stdint.h>
+
 /**
  * Bitmask of the cards held by a player
  * Bit 51 = SA, Bit 50 = SK, ...., Bit 0 = C2
  */
 typedef uint64_t hand_t;
 
-typedef union deal
+typedef union
 {
    struct { hand_t N, E, S, W; };
    hand_t H[4];
-} deal_t;
+} ww_deal_t;
 
 /**
  * 96 bit deal unique id, using Richard Pavlicek's Mapping Bridge Deals algorithm
@@ -42,18 +44,20 @@ typedef union deal
  */
 typedef __int128 deal_uid_t;
 
+extern const deal_uid_t WW_DEAL_UID_MAX;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
  * Use Richard Pavlicek's Mapping Bridge Deals algorithm to map a 96 bit deal uid
- * to our deal_t format
+ * to our internal ww_deal_t format
  *
  * @param deal_uid   Pavlicek's deal uid
  * @param deal       Pointer to deal_t struct
  */
-void ww_deal_map(deal_uid_t deal_uid, deal_t *deal);
+void ww_deal_map_pavlicek(deal_uid_t deal_uid, ww_deal_t *deal);
 
 /**
  * Generates the deal for one board
@@ -66,7 +70,24 @@ void ww_deal_map(deal_uid_t deal_uid, deal_t *deal);
  *
  * @return The deal uid
  */
-deal_uid_t ww_deal(deal_t *deal, const uint8_t key[32], uint64_t event_num, uint32_t session_num, uint32_t board_num);
+deal_uid_t ww_deal(const uint8_t key[32], uint64_t event_num, uint32_t session_num, uint32_t board_num);
+
+/**
+ * Convert the deal uid to PBN format string
+ *
+ * @param deal_uid   96 bit deal_uid
+ * @param pbn_deal   String buffer to write to (must be at least 58 bytes)
+ * @param board_num  Board number (because PBN deal string requires the dealer)
+ */
+void ww_deal_to_pbn(deal_uid_t deal_uid, char pbn_deal[58], unsigned board_num);
+
+/**
+ * Convert the deal uid to Pavlicek uuid hex string
+ *
+ * @param deal_uid   96 bit deal_uid
+ * @param deal_uuid  String buffer to write to (at least 24 bytes)
+ */
+void ww_deal_to_uuid(deal_uid_t deal_uid, char deal_uuid[24]);
 
 #ifdef __cplusplus
 }

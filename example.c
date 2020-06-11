@@ -28,29 +28,6 @@
 
 #include "wwdeal.h"
 
-static char denomination[] = "AKQJT98765432";
-#define SUIT_MASK 0b1111111111111
-
-void print_deal(deal_t *deal)
-{
-   for (int i = 0; i < 4; i++) {
-      hand_t H = deal->H[i];
-      for (int j = 0; j < 4; j++) {
-         int shift = 13 * (3 - j);
-         uint16_t S = (H & ((uint64_t)SUIT_MASK << shift)) >> shift;
-         while (S) {
-            int c = __builtin_clz(S);
-            printf("%c", denomination[c-19]);
-            S ^= 1 << (31-c);
-         }
-         if (j < 3) printf(".");
-      }
-      printf(" ");
-   }
-   printf("\n");
-}
-
-
 int main(int argc, char **argv)
 {
    uint8_t KEY[32];
@@ -78,10 +55,11 @@ int main(int argc, char **argv)
 
    uint64_t tic = clock();
    for (int i = 0; i < boards; i++) {
-      deal_t deal;
-      deal_uid_t dealid = ww_deal(&deal, KEY, 0, session, i);
-      printf("%02d %08lx%016lx ", i+1, (uint64_t)(dealid >> 64), (uint64_t)dealid);
-      print_deal(&deal);
+      deal_uid_t dealid = ww_deal(KEY, 0, session, i);
+      char pbn_deal[58], deal_uuid[25] = {0};
+      ww_deal_to_uuid(dealid, deal_uuid);
+      ww_deal_to_pbn(dealid, pbn_deal, i+1);
+      printf("%02d %s %s\n", i+1, deal_uuid, pbn_deal);
    }
    uint64_t toc = clock();
    double elapsed = (toc - tic)/(double)CLOCKS_PER_SEC;

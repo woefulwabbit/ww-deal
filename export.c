@@ -28,7 +28,7 @@ static char denomination[] = "AKQJT98765432";
 static char dealer[] = "WNES";
 #define SUIT_MASK 0b1111111111111
 
-void ww_deal_to_pbn(deal_uid_t deal_id, char pbn_deal[58], unsigned board_num)
+void ww_deal_to_pbn(deal_uid_t deal_id, char pbn_deal[70], unsigned board_num)
 {
    ww_deal_t deal;
    ww_deal_map_pavlicek(deal_id, &deal);
@@ -51,7 +51,7 @@ void ww_deal_to_pbn(deal_uid_t deal_id, char pbn_deal[58], unsigned board_num)
       }
       *p++ = ' ';
    }
-   *p = 0;
+   *(p-1) = 0;
 }
 
 void ww_deal_to_uuid(deal_uid_t deal_uid, char deal_uuid[25])

@@ -79,7 +79,7 @@ deal_uid_t ww_deal(const uint8_t key[32], uint64_t event_num, uint32_t session_n
  * @param pbn_deal   String buffer to write to (must be at least 58 bytes)
  * @param board_num  Board number (because PBN deal string requires the dealer)
  */
-void ww_deal_to_pbn(deal_uid_t deal_uid, char pbn_deal[58], unsigned board_num);
+void ww_deal_to_pbn(deal_uid_t deal_uid, char pbn_deal[70], unsigned board_num);
 
 /**
  * Convert the deal uid to Pavlicek uuid hex string

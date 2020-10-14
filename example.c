@@ -30,8 +30,8 @@
 
 int main(int argc, char **argv)
 {
-   uint8_t KEY[32];
-   unsigned session = 0, boards = 32;
+   uint8_t KEY[32] = {0};
+   unsigned session = 1, boards = 32;
 
    FILE *f = fopen("wwdeal.state", "rb");
 
@@ -54,12 +54,12 @@ int main(int argc, char **argv)
    printf("Generating %d boards for session number %d...\n", boards, session);
 
    uint64_t tic = clock();
-   for (int i = 0; i < boards; i++) {
-      deal_uid_t dealid = ww_deal(KEY, 0, session, i);
-      char pbn_deal[58], deal_uuid[25] = {0};
+   for (int i = 1; i <= boards; i++) {
+      deal_uid_t dealid = ww_deal(KEY, 1, session, i);
+      char deal_uuid[25] = {0}, pbn_deal[70];
       ww_deal_to_uuid(dealid, deal_uuid);
-      ww_deal_to_pbn(dealid, pbn_deal, i+1);
-      printf("%02d %s %s\n", i+1, deal_uuid, pbn_deal);
+      ww_deal_to_pbn(dealid, pbn_deal, i);
+      printf("%02d %s %s\n", i, deal_uuid, pbn_deal);
    }
    uint64_t toc = clock();
    double elapsed = (toc - tic)/(double)CLOCKS_PER_SEC;

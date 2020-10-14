@@ -85,9 +85,9 @@ void ww_deal_to_pbn(deal_uid_t deal_uid, char pbn_deal[58], unsigned board_num);
  * Convert the deal uid to Pavlicek uuid hex string
  *
  * @param deal_uid   96 bit deal_uid
- * @param deal_uuid  String buffer to write to (at least 24 bytes)
+ * @param deal_uuid  String buffer to write to (at least 25 bytes)
  */
-void ww_deal_to_uuid(deal_uid_t deal_uid, char deal_uuid[24]);
+void ww_deal_to_uuid(deal_uid_t deal_uid, char deal_uuid[25]);
 
 #ifdef __cplusplus
 }

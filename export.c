@@ -54,8 +54,7 @@ void ww_deal_to_pbn(deal_uid_t deal_id, char pbn_deal[58], unsigned board_num)
    *p = 0;
 }
 
-void ww_deal_to_uuid(deal_uid_t deal_uid, char deal_uuid[24])
+void ww_deal_to_uuid(deal_uid_t deal_uid, char deal_uuid[25])
 {
-#pragma GCC diagnostic ignored "-Wformat-truncation"
-   snprintf(deal_uuid, 24, "%08lx%016lx", (uint64_t)(deal_uid >> 64), (uint64_t)deal_uid);
+   snprintf(deal_uuid, 25, "%08lx%016lx", (uint64_t)(deal_uid >> 64), (uint64_t)deal_uid);
 }
